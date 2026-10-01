@@ -99,12 +99,15 @@ with st.sidebar:
     
     # Combined Multi-Model List
     model_options = {
-        "⚡ Auto-Select (Best & Fastest)": "openrouter/auto",
-        "🧠 ChatGPT (GPT-4o Mini)": "openai/gpt-4o-mini",
-        "🎨 Claude (Claude 3.5 Sonnet)": "anthropic/claude-3.5-sonnet",
-        "🚀 Gemini (Gemini 1.5 Flash)": "google/gemini-flash-1.5",
-        "🔥 Grok (Grok 2)": "x-ai/grok-2"
-    }
+    "⚡ Auto-Select (Best & Fastest)": "openrouter/auto",
+    "🧠 ChatGPT (GPT-4o Mini)": "openai/gpt-4o-mini",
+    "🎨 Claude (Claude 3.5 Sonnet)": "anthropic/claude-3.5-sonnet",
+    "💧 Gemini (Gemini 1.5 Flash)": "google/gemini-flash-1.5",
+    "🔥 Grok (Grok 2)": "x-ai/grok-2",
+    "💻 DeepSeek Chat (Super Code)": "deepseek/deepseek-chat",
+    "🦙 Llama 3.3 (Fast & Cheap)": "meta-llama/llama-3.3-70b-instruct"
+}
+
     
     selected_label = st.selectbox(
         "Select AI Engine:",
