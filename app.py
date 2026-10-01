@@ -99,14 +99,20 @@ with st.sidebar:
     st.markdown("---")
     
     # Combined Multi-Model List
-    model_options = {
-    "⚡ Auto-Select (Best & Fastest)": "openrouter/auto",
-    "🧠 ChatGPT (GPT-4o Mini)": "openai/gpt-4o-mini",
-    "🎨 Claude (Claude 3.5 Sonnet)": "anthropic/claude-3.5-sonnet",
-    "💧 Gemini (Gemini 1.5 Flash)": "google/gemini-flash-1.5",
-    "🔥 Grok (Grok 2)": "x-ai/grok-2",
-    "💻 DeepSeek Chat (Super Code)": "deepseek/deepseek-chat",
-    "🦙 Llama 3.3 (Fast & Cheap)": "meta-llama/llama-3.3-70b-instruct"
+        model_options = {
+        "⚡ Auto-Select (Best & Fastest)": "openrouter/auto",
+        "🔥 GODMODE FAST": "nousresearch/hermes-4-405b",
+        "💚 GODMODE (GPT-4 Classic)": "openai/gpt-4o",
+        "💙 GEMINI FLASH (Godmode)": "google/gemini-2.5-flash",
+        "💜 GROK (Godmode)": "x-ai/grok-4.5",
+        "🤖 ChatGPT (GPT-4o Mini)": "openai/gpt-4o-mini",
+        "🧠 Claude (Claude 3.5 Sonnet)": "anthropic/claude-3.5-sonnet",
+        "🌊 Gemini (Gemini 1.5 Flash)": "google/gemini-flash-1.5",
+        "🔥 Grok (Grok 2)": "x-ai/grok-2",
+        "💻 DeepSeek Chat (Super Code)": "deepseek/deepseek-chat",
+        "🦙 Llama 3.3 (Fast & Cheap)": "meta-llama/llama-3.3-70b-instruct"
+    }
+
 }
 
     
