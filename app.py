@@ -169,7 +169,6 @@ if prompt := st.chat_input("Message Multi-AI..."):
             st.session_state.messages.append({"role": "assistant", "content": full_response})
             
         except Exception as e:
-            st.error(f"Error: {e}")
 
 
 
@@ -188,26 +187,18 @@ if prompt := st.chat_input("Message Multi-AI..."):
 
 
 
-# ==========================================
-# 📦 Git Clone Tool (यहाँ से नया टूल शुरू है)
-# ==========================================
-st.markdown("---")
-st.subheader("📦 Git Clone Tool")
-st.write("यहाँ नीचे अपनी गिट रिपॉजिटरी का लिंक डालें:")
 
-# यूजर से गिट URL लेने के लिए इनपुट बॉक्स
-repo_url = st.text_input("GitHub URL यहाँ लिखें:")
 
 if st.button("Clone करें"):
     if repo_url:
         try:
-                import shutil, os
-        if os.path.exists(repo_url.split("/")[-1].replace(".git", "")):
-            shutil.rmtree(repo_url.split("/")[-1].replace(".git", ""))
-    
+            import shutil, os
             
-            # 🔥 https://github.com/elder-plinius/G0DM0D3.git
-        
+            # फोल्डर का नाम निकालकर चेक करो और अगर पहले से है तो डिलीट कर दो
+            folder_name = repo_url.split("/")[-1].replace(".git", "")
+            if os.path.exists(folder_name):
+                shutil.rmtree(folder_name)
+            
             # गिट क्लोन करने की सुरक्षित कमांड
             result = subprocess.run(["git", "clone", repo_url], capture_output=True, text=True, check=True)
             
@@ -219,4 +210,10 @@ if st.button("Clone करें"):
         except Exception as e:
             st.error(f"कुछ गड़बड़ हो गई: {e}")
     else:
-            st.warning("कृपया पहले सही लिंक दर्ज करें।")
+        st.warning("कृपया पहले सही लिंक दर्ज करें।")
+
+
+
+
+
+            
