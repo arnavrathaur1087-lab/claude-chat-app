@@ -169,6 +169,7 @@ if prompt := st.chat_input("Message Multi-AI..."):
             st.session_state.messages.append({"role": "assistant", "content": full_response})
             
         except Exception as e:
+            st.error(f"Error:(e)")
 
 
 
@@ -188,11 +189,19 @@ if prompt := st.chat_input("Message Multi-AI..."):
 
 
 
+
+st.markdown("---")
+st.subheader("📦 Git Clone Tool")
+st.write("यहाँ नीचे अपनी गिट रिपॉजिटरी का लिंक डालें:")
+
+# URL लेने के लिए इनपुट बॉक्स
+repo_url = st.text_input("GitHub URL यहाँ लिखें:")
 
 if st.button("Clone करें"):
     if repo_url:
         try:
             import shutil, os
+            import subprocess
             
             # फोल्डर का नाम निकालकर चेक करो और अगर पहले से है तो डिलीट कर दो
             folder_name = repo_url.split("/")[-1].replace(".git", "")
@@ -211,8 +220,6 @@ if st.button("Clone करें"):
             st.error(f"कुछ गड़बड़ हो गई: {e}")
     else:
         st.warning("कृपया पहले सही लिंक दर्ज करें।")
-
-
 
 
 
