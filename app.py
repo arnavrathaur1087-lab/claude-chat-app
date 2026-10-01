@@ -201,15 +201,13 @@ repo_url = st.text_input("GitHub URL यहाँ लिखें:")
 if st.button("Clone करें"):
     if repo_url:
         try:
-            # ----------------------------------
-            # 🔥 https://github.com/elder-plinius/G0DM0D3.git
-            # ----------------------------------
-            import shutil, os
-            if os.path.exists(repo_url.split("/")[-1].replace(".git", "")): shutil.rmtree(repo_url.split("/")[-1].replace(".git", ""))
-        
+                import shutil, os
+        if os.path.exists(repo_url.split("/")[-1].replace(".git", "")):
+            shutil.rmtree(repo_url.split("/")[-1].replace(".git", ""))
+    
             
-
-
+            # 🔥 https://github.com/elder-plinius/G0DM0D3.git
+        
             # गिट क्लोन करने की सुरक्षित कमांड
             result = subprocess.run(["git", "clone", repo_url], capture_output=True, text=True, check=True)
             
