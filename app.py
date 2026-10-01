@@ -169,3 +169,50 @@ if prompt := st.chat_input("Message Multi-AI..."):
             
         except Exception as e:
             st.error(f"Error: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ==========================================
+# 📦 Git Clone Tool (यहाँ से नया टूल शुरू है)
+# ==========================================
+st.markdown("---")
+st.subheader("📦 Git Clone Tool")
+st.write("यहाँ नीचे अपनी गिट रिपॉजिटरी का लिंक डालें:")
+
+# यूजर से गिट URL लेने के लिए इनपुट बॉक्स
+repo_url = st.text_input("GitHub URL यहाँ लिखें:")
+
+if st.button("Clone करें"):
+    if repo_url:
+        try:
+            # ----------------------------------
+            # 🔥 https://github.com/elder-plinius/G0DM0D3.git
+            # ----------------------------------
+            
+            # गिट क्लोन करने की सुरक्षित कमांड
+            result = subprocess.run(["git", "clone", repo_url], capture_output=True, text=True, check=True)
+            
+            st.success("सफलतापूर्वक क्लोन हो गया!")
+            st.code(result.stdout)
+            
+        except subprocess.CalledProcessError as e:
+            st.error(f"क्लोन करने में एरर आया: {e.stderr}")
+        except Exception as e:
+            st.error(f"कुछ गड़बड़ हो गई: {e}")
+    else:
+            st.warning("कृपया पहले सही लिंक दर्ज करें।")
