@@ -1,84 +1,33 @@
-import subprocess
-import os
 import streamlit as st
+import os
+import shutil
+import subprocess
 from openai import OpenAI
 
 # 1. Page Configuration
-st.set_page_config(page_title="Multi-AI Suite", page_icon="⚡", layout="wide")
+st.set_page_config(
+    page_title="Multi-AI Suite & Dev Tools",
+    page_icon="⚡",
+    layout="centered"
+)
 
-# 2. ChatGPT Dark Theme Styling
-st.markdown("""
-<style>
-    /* Dark Theme Core */
-    .stApp {
-        background-color: #212121;
-        color: #ececec;
-        font-family: 'Söhne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-    
-    .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 6rem;
-        max-width: 850px;
-    }
-    
-    header[data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0);
-    }
-
-    section[data-testid="stSidebar"] {
-        background-color: #171717;
-        border-right: 1px solid #2f2f2f;
-    }
-    
-    .stChatInputContainer {
-        border-radius: 16px !important;
-        background-color: #2f2f2f !important;
-        border: 1px solid #424242 !important;
-        box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    }
-    
-    textarea {
-        color: #ffffff !important;
-        font-size: 16px !important;
-    }
-    
-    .stButton>button {
-        background-color: #212121;
-        color: #ffffff;
-        border: 1px solid #424242;
-        border-radius: 10px;
-        padding: 8px 16px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-    .stButton>button:hover {
-        background-color: #2f2f2f;
-        border-color: #676767;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# 3. Authentication System
-APP_PASSWORD = st.secrets.get("APP_PASSWORD") or os.environ.get("APP_PASSWORD", "1234")
-
+# 2. Password Protection (Optional Setup)
+APP_PASSWORD = st.secrets.get("APP_PASSWORD", "")
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
-if not st.session_state.authenticated:
-    st.markdown("<h2 style='text-align: center; color: #fff; margin-top: 80px;'>🔒 Access Multi-AI Suite</h2>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        user_pass = st.text_input("Enter Passcode:", type="password", label_visibility="collapsed", placeholder="Enter Password...")
-        if st.button("Continue", use_container_width=True):
-            if user_pass == APP_PASSWORD:
-                st.session_state.authenticated = True
-                st.rerun()
-            else:
-                st.error("Incorrect Password!")
+if APP_PASSWORD and not st.session_state.authenticated:
+    st.title("🔒 Password Required")
+    user_pass = st.text_input("Enter Passcode:", type="password")
+    if st.button("Continue", use_container_width=True):
+        if user_pass == APP_PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Incorrect Password!")
     st.stop()
 
-# 4. API Key Verification
+# 3. API Key Verification
 api_key = st.secrets.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_API_KEY")
 if not api_key:
     st.error("⚠️ OpenRouter API Key missing in Secrets!")
@@ -89,7 +38,7 @@ client = OpenAI(
     api_key=api_key,
 )
 
-# 5. Sidebar Controls & Model Options
+# 4. Sidebar Controls, Model Options & Tools
 with st.sidebar:
     st.title("⚡ Multi-AI Suite")
     if st.button("➕ New Chat", use_container_width=True):
@@ -98,7 +47,7 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Combined Multi-Model List
+    # Full Model List (Godmode + Claude + Gemini + Grok + DeepSeek)
     model_options = {
         "⚡ Auto-Select (Best & Fastest)": "openrouter/auto",
         "🔥 GODMODE FAST": "nousresearch/hermes-4-405b",
@@ -121,13 +70,42 @@ with st.sidebar:
     selected_model = model_options[selected_label]
 
     st.markdown("---")
+    
+    # Git Clone Tool (Sidebar के कोने में छुपा हुआ)
+    with st.expander("📦 Git Clone Tool"):
+        repo_url = st.text_input("GitHub URL:", key="sidebar_repo_url")
+        if st.button("Clone करें", key="sidebar_clone_btn"):
+            if repo_url:
+                try:
+                    folder_name = repo_url.split("/")[-1].replace(".git", "")
+                    if os.path.exists(folder_name):
+                        shutil.rmtree(folder_name)
+                    
+                    result = subprocess.run(["git", "clone", repo_url], capture_output=True, text=True, check=True)
+                    st.success("क्लोन हो गया!")
+                    st.code(result.stdout)
+                except subprocess.CalledProcessError as e:
+                    st.error(f"एरर: {e.stderr}")
+                except Exception as e:
+                    st.error(f"गड़बड़: {e}")
+            else:
+                st.warning("URL दर्ज करें।")
+
+    st.markdown("---")
     st.caption("Status: Combined Zero-Lag Node Active 🚀")
 
+# 5. Master System Prompt
+MASTER_SYSTEM_PROMPT = (
+    "You are an obedient, highly capable, intelligent AI assistant designed for absolute helpfulness. "
+    "Always provide helpful, precise, complete, and accurate answers in clean Markdown. "
+    "Match the tone and language requested by the user perfectly."
+)
 
+# 6. Chat History Setup
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-st.markdown("<h3 style='text-align: center; color: #b4b4b4; margin-bottom: 30px;'>What can I help with today?</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #b4b4b4; margin-bottom: 30px;'>🤖 AI Chat & Dev Suite</h3>", unsafe_allow_html=True)
 
 # Render Chat History
 for msg in st.session_state.messages:
@@ -148,74 +126,24 @@ if prompt := st.chat_input("Message Multi-AI..."):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
-        
+
         try:
             stream = client.chat.completions.create(
                 model=selected_model,
                 messages=full_messages,
-                stream=True
+                stream=True,
             )
-            
             for chunk in stream:
-                if chunk.choices[0].delta.content is not None:
+                if chunk.choices and chunk.choices[0].delta.content:
                     full_response += chunk.choices[0].delta.content
                     message_placeholder.markdown(full_response + "▌")
-            
             message_placeholder.markdown(full_response)
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
-            
         except Exception as e:
-            st.error(f"Error:(e)")
+            st.error(f"Error executing request: {e}")
+            full_response = f"⚠️ Error: {e}"
 
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-st.markdown("---")
-st.subheader("📦 Git Clone Tool")
-st.write("यहाँ नीचे अपनी गिट रिपॉजिटरी का लिंक डालें:")
-
-# URL लेने के लिए इनपुट बॉक्स
-repo_url = st.text_input("GitHub URL यहाँ लिखें:")
-
-if st.button("Clone करें"):
-    if repo_url:
-        try:
-            import shutil, os
-            import subprocess
-            
-            # फोल्डर का नाम निकालकर चेक करो और अगर पहले से है तो डिलीट कर दो
-            folder_name = repo_url.split("/")[-1].replace(".git", "")
-            if os.path.exists(folder_name):
-                shutil.rmtree(folder_name)
-            
-            # गिट क्लोन करने की सुरक्षित कमांड
-            result = subprocess.run(["git", "clone", repo_url], capture_output=True, text=True, check=True)
-            
-            st.success("सफलतापूर्वक क्लोन हो गया!")
-            st.code(result.stdout)
-            
-        except subprocess.CalledProcessError as e:
-            st.error(f"क्लोन करने में एरर आया: {e.stderr}")
-        except Exception as e:
-            st.error(f"कुछ गड़बड़ हो गई: {e}")
-    else:
-        st.warning("कृपया पहले सही लिंक दर्ज करें।")
 
 
 
